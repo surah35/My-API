@@ -15,7 +15,6 @@ def read_root():
 
 @app.get("/api/data")
 def get_data():
-    return {"Hello": "World"}
     try:
         conn = pymssql.connect(
             server=SERVER,
