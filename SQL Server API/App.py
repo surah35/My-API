@@ -5,7 +5,7 @@ import pymssql
 app = FastAPI()
 
 # SQL Server 連線字串
-SERVER = "127.0.0.1"
+SERVER = "192.168.1.112"
 DBNAME = "Virtual_Store"
 TBNAME = "store_data"
 
