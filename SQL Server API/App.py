@@ -9,6 +9,10 @@ SERVER = "127.0.0.1"
 DBNAME = "Virtual_Store"
 TBNAME = "store_data"
 
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
 @app.get("/api/data")
 def get_data():
     try:
@@ -17,6 +21,7 @@ def get_data():
             charset='UTF-8',
             database=DBNAME,
         )
+        return {"Hello": "World"}
         if conn == None:
             return
         print("資料庫連接成功")
