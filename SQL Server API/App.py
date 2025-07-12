@@ -15,13 +15,14 @@ def read_root():
 
 @app.get("/api/data")
 def get_data():
+    return {"Hello": "World"}
     try:
         conn = pymssql.connect(
             server=SERVER,
             charset='UTF-8',
             database=DBNAME,
         )
-        return {"Hello": "World"}
+        
         if conn == None:
             return
         print("資料庫連接成功")
