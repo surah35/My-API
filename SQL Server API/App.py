@@ -17,6 +17,7 @@ def get_data():
             charset='UTF-8',
             database=DBNAME,
         )
+        return [{"id": 1, "name": "test"}, {"id": 2, "name": "demo"}]
         if conn == None:
             return
         print("資料庫連接成功")
