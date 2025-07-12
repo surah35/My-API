@@ -23,8 +23,8 @@ def get_data():
 
         cursor = conn.cursor(as_dict=True)
         cursor.execute(f"SELECT TOP 5 * FROM {TBNAME}")
-        rows = cursor.fetchall()
-        result = [dict(zip([column[0] for column in cursor.description], row)) for row in rows]
+        
+        result = cursor.fetchall()
         conn.close()
         return JSONResponse(content=result)
         
@@ -44,3 +44,22 @@ def get_data():
     # except Exception as e:
     #     return jsonify({'error': str(e)}), 500
 
+if __name__ == "__main__":
+    try:
+        conn = pymssql.connect(
+                server=SERVER,
+                charset='UTF-8',
+                database=DBNAME,
+            )
+        if conn:   
+            print("資料庫連接成功")
+
+            cursor = conn.cursor(as_dict=True)
+            cursor.execute(f"SELECT TOP 5 * FROM {TBNAME}")
+            
+            # columns = [desc[0] for desc in cursor.description]
+            result = cursor.fetchall()
+            conn.close()
+            print(result)
+    except pymssql.DatabaseError as e:
+        print(e)
