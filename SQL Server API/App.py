@@ -8,7 +8,7 @@ load_dotenv()
 app = FastAPI()
 
 # globla 
-SERVER = "0.tcp.jp.ngrok.io:18976"
+SERVER = os.getenv("DB_SERVER")
 USER = os.getenv("DB_USER")
 PASSWORD = os.getenv("DB_PASSWORD")
 DBNAME = "Virtual_Store"
