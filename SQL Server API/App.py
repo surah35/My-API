@@ -1,15 +1,21 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 import pymssql
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
 
-# SQL Server 連線字串
-SERVER = "192.168.1.112"
+# globla 
+SERVER = "0.tcp.jp.ngrok.io:18976"
+USER = os.getenv("DB_USER")
+PASSWORD = os.getenv("DB_PASSWORD")
 DBNAME = "Virtual_Store"
 TBNAME = "store_data"
+print(USER,PASSWORD)
 
-@app.head("/")
+@app.get("/")
 def read_root():
     return {"Hello": "World"}
 
@@ -19,6 +25,8 @@ def get_data():
         conn = pymssql.connect(
             server=SERVER,
             charset='UTF-8',
+            user=USER,
+            password=PASSWORD,
             database=DBNAME,
         )
         
