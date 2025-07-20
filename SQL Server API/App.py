@@ -13,7 +13,7 @@ USER = os.getenv("DB_USER")
 PASSWORD = os.getenv("DB_PASSWORD")
 DBNAME = "Virtual_Store"
 TBNAME = "store_data"
-print(USER,PASSWORD)
+
 
 @app.get("/")
 def read_root():
@@ -35,11 +35,13 @@ def get_data():
         print("資料庫連接成功")
 
         cursor = conn.cursor(as_dict=True)
-        cursor.execute(f"SELECT TOP 5 * FROM {TBNAME}")
-        
+        cursor.execute(f"SELECT * FROM {TBNAME}")
         result = cursor.fetchall()
+        cursor = conn.cursor(as_dict=False)
+        cursor.execute(f"SELECT MAX(ID) as MaxID FROM {TBNAME}")
+        maxid = cursor.fetchone()
         conn.close()
-        return JSONResponse(content=result)
+        return JSONResponse(content={"MaxID":maxid,"array":result})
         
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
