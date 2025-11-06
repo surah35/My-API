@@ -24,7 +24,7 @@ class StoreItem(BaseModel):
 class CustomerItem(BaseModel):
     CustomerID: str
     CustomerName: str
-    PhoneNum: str
+    PhoneNumber: str
     Address: str
     Email: str
 
@@ -125,7 +125,7 @@ def insert_data(item: CustomerItem):
         
         cursor.execute(
             f"INSERT INTO {tb_name} (Customer_id, Customer_name, Phone, Address, Email) VALUES (%s, %s, %s, %s, %s)",
-            (item.CustomerID, item.CustomerName, item.PhoneNum, item.Address,item.Email)
+            (item.CustomerID, item.CustomerName, item.PhoneNumber, item.Address,item.Email)
         )
         conn.commit()
         conn.close()
