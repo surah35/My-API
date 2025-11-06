@@ -21,6 +21,13 @@ class StoreItem(BaseModel):
     Price: int
     Num:int
 
+class CustomerItem(BaseModel):
+    CustomerID: str
+    CustomerName: str
+    PhoneNum: str
+    Address: str
+    Email: str
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -52,6 +59,34 @@ def get_data():
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
+@app.get("/api/data/customer")
+def get_data():
+    try:
+        tb_name = "Customer"
+        conn = pymssql.connect(
+            server=SERVER,
+            charset='UTF-8',
+            user=USER,
+            password=PASSWORD,
+            database=DBNAME,
+        )
+        
+        if conn == None:
+            return
+        print("資料庫連接成功")
+
+        cursor = conn.cursor(as_dict=True)
+        cursor.execute(f"SELECT * FROM {tb_name}")
+        result = cursor.fetchall()
+        cursor = conn.cursor(as_dict=False)
+        cursor.execute(f"SELECT MAX(Customer_id) as MaxID FROM {tb_name}")
+        maxid = cursor.fetchone()
+        conn.close()
+        return JSONResponse(content={"MaxID":maxid,"array":result})
+        
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 # 新增資料
 @app.post("/api/data")
 def insert_data(item: StoreItem):
@@ -74,6 +109,29 @@ def insert_data(item: StoreItem):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+# 新增資料
+@app.post("/api/data/customer")
+def insert_data(item: CustomerItem):
+    try:
+        tb_name = "Customer"
+        conn = pymssql.connect(
+            server=SERVER,
+            charset='UTF-8',
+            user=USER,
+            password=PASSWORD,
+            database=DBNAME,
+        )
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            f"INSERT INTO {tb_name} (Customer_id, Customer_name, Phone, Address, Email) VALUES (%s, %s, %s, %s, %s)",
+            (item.CustomerID, item.CustomerName, item.PhoneNum, item.Address,item.Email)
+        )
+        conn.commit()
+        conn.close()
+        return JSONResponse(content={"message": "資料新增成功", "data": item.dict()})
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 # 刪除資料
 @app.delete("/api/data/{id}")
